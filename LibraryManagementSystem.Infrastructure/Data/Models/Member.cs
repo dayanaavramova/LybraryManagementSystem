@@ -16,10 +16,6 @@ namespace LibraryManagementSystem.Infrastructure.Data.Models
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(MemberNameMaxLeght)]
-        public string Name { get; set; } = string.Empty;
-
-        [Required]
         [MaxLength(NumberMaxLenght)]
         public string PhoneNumber { get; set; } = string.Empty;
 
