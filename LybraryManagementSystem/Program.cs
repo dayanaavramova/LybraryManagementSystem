@@ -1,4 +1,7 @@
+using LibraryManagementSystem.Core.Contracts;
+using LibraryManagementSystem.Core.Services;
 using LibraryManagementSystem.Infrastructure.Data;
+using LibraryManagementSystem.Infrastructure.Data.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,7 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+builder.Services.AddScoped<IRepository, Repository>();
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+builder.Services.AddScoped<IBookService, BookService>();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 {
