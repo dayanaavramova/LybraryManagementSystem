@@ -1,12 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace LibraryManagementSystem.Controllers
 {
-    public class BookController : BaseController
+    public class BookController : Controller
     {
         public IActionResult All()
         {
             return View();
         }
-    }
+
+		public string GetUserId()
+		{
+			return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+		}
+	}
 }

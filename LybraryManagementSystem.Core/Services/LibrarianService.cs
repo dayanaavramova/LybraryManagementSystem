@@ -19,9 +19,10 @@ namespace LibraryManagementSystem.Core.Services
             repository = _repository;
         }
 
-        public Task CreateAsync(string userId, string phoneNumber)
+        public async Task CreateAsync(string userId, string phoneNumber)
         {
-            throw new NotImplementedException();
+            await repository.AddAsync(new Librarian() { UserId = userId, PhoneNumber = phoneNumber });
+            await repository.SaveChangesAsync();
         }
 
         public async Task<bool> ExistsByIdAsync(string userId)
@@ -30,5 +31,10 @@ namespace LibraryManagementSystem.Core.Services
                 .AnyAsync(a => a.UserId == userId);
         }
 
+        public async Task<bool> UserWithPhoneNumberExistsAsync(string phoneNumber)
+        {
+            return await repository.AllReadOnly<Librarian>()
+                .AnyAsync(a => a.PhoneNumber == phoneNumber);
+        }
     }
 }
