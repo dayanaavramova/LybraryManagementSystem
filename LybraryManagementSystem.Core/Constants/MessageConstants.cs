@@ -14,6 +14,8 @@ namespace LibraryManagementSystem.Core.Constants
 
         public const string PhoneExists = "Phone number already exists. Enter another one";
 
+        public const string HasRole = "User already has a role.";
+
         public const string UserMessageSuccess = "UserMessageSuccess";
 
         public const string UserMessageError = "UserMessageError";

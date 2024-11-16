@@ -11,12 +11,10 @@ namespace LibraryManagementSystem.Controllers
     public class LibrarianController : Controller
     {
         private readonly ILibrarianService librarianService;
-        private readonly IRepository repository;
 
-        public LibrarianController(ILibrarianService _librarianService, IRepository _repository)
+        public LibrarianController(ILibrarianService _librarianService)
         {
             librarianService = _librarianService;
-            repository = _repository;
         }
 
         [HttpGet]
@@ -26,6 +24,11 @@ namespace LibraryManagementSystem.Controllers
             {
                 return BadRequest();
             }
+
+            if (await librarianService.UserHasRoleAsync(GetUserId()))
+            {
+                return BadRequest();
+			}
 
             var model = new BecomeLibrarianFormModel();
 
@@ -39,8 +42,13 @@ namespace LibraryManagementSystem.Controllers
             {
                 return BadRequest();
             }
-            
-            if (await librarianService.UserWithPhoneNumberExistsAsync(model.PhoneNumber))
+
+			if (await librarianService.UserHasRoleAsync(GetUserId()))
+			{
+				return BadRequest();
+			}
+
+			if (await librarianService.UserWithPhoneNumberExistsAsync(model.PhoneNumber))
             {
                 ModelState.AddModelError(nameof(model.PhoneNumber), PhoneExists);
             }

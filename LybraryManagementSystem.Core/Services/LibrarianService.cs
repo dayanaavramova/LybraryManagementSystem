@@ -31,7 +31,13 @@ namespace LibraryManagementSystem.Core.Services
                 .AnyAsync(a => a.UserId == userId);
         }
 
-        public async Task<bool> UserWithPhoneNumberExistsAsync(string phoneNumber)
+		public async Task<bool> UserHasRoleAsync(string userId)
+		{
+            return await repository.AllReadOnly<Member>()
+                .AnyAsync(a => a.UserId == userId);
+		}
+
+		public async Task<bool> UserWithPhoneNumberExistsAsync(string phoneNumber)
         {
             return await repository.AllReadOnly<Librarian>()
                 .AnyAsync(a => a.PhoneNumber == phoneNumber);

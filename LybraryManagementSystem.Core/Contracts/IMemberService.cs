@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace LibraryManagementSystem.Core.Contracts
 {
-	internal interface IMemberService
+	public interface IMemberService
 	{
+		Task<bool> ExistsByIdAsync(string userId);
+		Task CreateAsync(string userId, string phoneNumber);
+		Task<bool> UserWithPhoneNumberExistsAsync(string phoneNumber);
+		Task<bool> UserHasRoleAsync(string userId);
 	}
 }
