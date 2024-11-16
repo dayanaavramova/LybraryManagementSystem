@@ -46,5 +46,7 @@ namespace LibraryManagementSystem.Infrastructure.Data.Models
 
         [Required]
         public string ImageUrl { get; set; } = string.Empty;
+
+        public IEnumerable<Reservation> Reservations { get; set; } = new List<Reservation>();
     }
 }

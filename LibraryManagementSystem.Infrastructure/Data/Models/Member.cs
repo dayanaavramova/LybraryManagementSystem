@@ -30,5 +30,6 @@ namespace LibraryManagementSystem.Infrastructure.Data.Models
         public IdentityUser User { get; set; } = null!;
 
         public IEnumerable<Loan> Loans { get; set; } = new List<Loan>();
+        public IEnumerable<Reservation> Reservations { get; set; } = new List<Reservation>();
     }
 }

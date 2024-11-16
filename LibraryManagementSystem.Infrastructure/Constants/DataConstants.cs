@@ -16,5 +16,6 @@ namespace LibraryManagementSystem.Infrastructure.Constants
         public const int BookAuthorMaxLenght = 50;
         public const int BookISBNMaxLenght = 13;
         public const int NumberMaxLenght = 13;
+        public const int NumberMinLenght = 7;
     }
 }

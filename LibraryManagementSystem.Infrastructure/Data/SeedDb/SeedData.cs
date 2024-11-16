@@ -17,6 +17,7 @@ namespace LibraryManagementSystem.Infrastructure.Data.SeedDb
         public Book SecondBook { get; set; }
         public Book ThirdBook { get; set; }
         public Loan FirstLoan { get; set; }
+        public Reservation FirstReservation { get; set; }
 
         public SeedData()
         {
@@ -26,6 +27,7 @@ namespace LibraryManagementSystem.Infrastructure.Data.SeedDb
             SeedGenre();
             SeedBooks();
             SeedLoans();
+            SeedReservations();
         }
 
         private void SeedUsers()
@@ -155,6 +157,16 @@ namespace LibraryManagementSystem.Infrastructure.Data.SeedDb
                 BookId = FirstBook.Id,
                 MemberId = Member.Id,
                 ReturnDate = new DateTime(2025, 3, 10)
+            };
+        }
+
+        private void SeedReservations()
+        {
+            FirstReservation = new Reservation()
+            {
+                Id = 1,
+                BookId = FirstBook.Id,
+                MemberId = Member.Id
             };
         }
     }
