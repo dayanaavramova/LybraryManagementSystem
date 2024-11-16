@@ -9,6 +9,6 @@ namespace LibraryManagementSystem.Core.Contracts
 {
     public interface IBookService
     {
-        Task<IEnumerable<BookIndexServiceModel>> LastThreeBooks();
+        Task<IEnumerable<BookIndexServiceModel>> LastThreeBooksAsync();
     }
 }

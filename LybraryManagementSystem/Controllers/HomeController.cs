@@ -22,7 +22,7 @@ namespace LibraryManagementSystem.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            var model = await _bookService.LastThreeBooks();
+            var model = await _bookService.LastThreeBooksAsync();
 
             return View(model);
         }

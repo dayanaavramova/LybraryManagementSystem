@@ -4,6 +4,7 @@ using LibraryManagementSystem.Infrastructure.Data;
 using LibraryManagementSystem.Infrastructure.Data.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,7 @@ builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<ILibrarianService, LibrarianService>();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 {
@@ -26,6 +28,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 })
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
 
 var app = builder.Build();
 

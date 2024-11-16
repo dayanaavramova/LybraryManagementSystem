@@ -20,7 +20,7 @@ namespace LibraryManagementSystem.Core.Services
             repository = _repository;
         }
 
-        public async Task<IEnumerable<BookIndexServiceModel>> LastThreeBooks()
+        public async Task<IEnumerable<BookIndexServiceModel>> LastThreeBooksAsync()
         {
             return await repository
                 .AllReadOnly<Book>()
