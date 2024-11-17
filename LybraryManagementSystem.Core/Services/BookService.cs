@@ -1,4 +1,5 @@
 ﻿using LibraryManagementSystem.Core.Contracts;
+using LibraryManagementSystem.Core.Models.Book;
 using LibraryManagementSystem.Core.Models.Home;
 using LibraryManagementSystem.Infrastructure.Data.Common;
 using LibraryManagementSystem.Infrastructure.Data.Models;
@@ -20,7 +21,17 @@ namespace LibraryManagementSystem.Core.Services
             repository = _repository;
         }
 
-        public async Task<IEnumerable<BookIndexServiceModel>> LastThreeBooksAsync()
+		public async Task<IEnumerable<AllBooksModel>> AllBooksAsync()
+		{
+			return await repository
+                .AllReadOnly<Book>()
+                .Select(b => new AllBooksModel()
+                {
+
+                }).ToListAsync();
+		}
+
+		public async Task<IEnumerable<BookIndexServiceModel>> LastThreeBooksAsync()
         {
             return await repository
                 .AllReadOnly<Book>()

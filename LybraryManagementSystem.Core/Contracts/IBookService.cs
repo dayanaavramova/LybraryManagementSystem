@@ -1,4 +1,5 @@
-﻿using LibraryManagementSystem.Core.Models.Home;
+﻿using LibraryManagementSystem.Core.Models.Book;
+using LibraryManagementSystem.Core.Models.Home;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace LibraryManagementSystem.Core.Contracts
     public interface IBookService
     {
         Task<IEnumerable<BookIndexServiceModel>> LastThreeBooksAsync();
+        Task<IEnumerable<AllBooksModel>> AllBooksAsync();
     }
 }

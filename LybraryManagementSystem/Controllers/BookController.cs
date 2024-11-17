@@ -5,8 +5,10 @@ namespace LibraryManagementSystem.Controllers
 {
     public class BookController : Controller
     {
+        [HttpGet]
         public IActionResult All()
         {
+
             return View();
         }
 
