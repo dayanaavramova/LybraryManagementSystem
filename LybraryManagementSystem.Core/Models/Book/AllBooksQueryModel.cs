@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LibraryManagementSystem.Core.Models.Book
 {
-	public class AllBooksModel
+	public class AllBooksQueryModel
 	{
 		public int Id { get; set; }
 		public string Title { get; set; } = string.Empty;

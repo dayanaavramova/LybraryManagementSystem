@@ -11,6 +11,9 @@ namespace LibraryManagementSystem.Core.Contracts
     public interface IBookService
     {
         Task<IEnumerable<BookIndexServiceModel>> LastThreeBooksAsync();
-        Task<IEnumerable<AllBooksModel>> AllBooksAsync();
+        Task<IEnumerable<AllBooksQueryModel>> AllBooksAsync();
+        Task<IEnumerable<BookGenreServiceModel>> AllGenresAsync();
+        Task<bool> GenreExistsAsync(int genreId);
+        Task<int> CreateAsync(BookFormModel model, int librarianId);
     }
 }

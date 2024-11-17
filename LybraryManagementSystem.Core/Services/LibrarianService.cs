@@ -31,7 +31,13 @@ namespace LibraryManagementSystem.Core.Services
                 .AnyAsync(a => a.UserId == userId);
         }
 
-		public async Task<bool> UserHasRoleAsync(string userId)
+		public async Task<int?> GetLibrarianIdAsync(string userId)
+        {
+            return (await repository.AllReadOnly<Librarian>()
+                .FirstOrDefaultAsync(l => l.UserId == userId))?.Id;
+        }
+
+        public async Task<bool> UserHasRoleAsync(string userId)
 		{
             return await repository.AllReadOnly<Member>()
                 .AnyAsync(a => a.UserId == userId);

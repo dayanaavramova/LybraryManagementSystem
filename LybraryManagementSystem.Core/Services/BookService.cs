@@ -21,14 +21,50 @@ namespace LibraryManagementSystem.Core.Services
             repository = _repository;
         }
 
-		public async Task<IEnumerable<AllBooksModel>> AllBooksAsync()
+		public async Task<IEnumerable<AllBooksQueryModel>> AllBooksAsync()
 		{
 			return await repository
                 .AllReadOnly<Book>()
-                .Select(b => new AllBooksModel()
+                .Select(b => new AllBooksQueryModel()
                 {
 
                 }).ToListAsync();
+		}
+
+		public async Task<IEnumerable<BookGenreServiceModel>> AllGenresAsync()
+		{
+            return await repository.AllReadOnly<Genre>()
+                .Select(g => new BookGenreServiceModel()
+                {
+                    Id = g.Id,
+                    Name = g.Name
+                }).ToListAsync();
+		}
+
+		public async Task<int> CreateAsync(BookFormModel model, int librarianId)
+		{
+			Book book = new Book()
+            {
+                Title = model.Title,
+                Author = model.Author,
+                ISBN = model.ISBN,
+                GenreId = model.GenreId,
+                LibrarianId = librarianId,
+                PublishedDate = model.PublishedDate,
+                CopiesAvailable = model.CopiesAvailable,
+                ImageUrl = model.ImageUrl
+            };
+
+            await repository.AddAsync(book);
+            await repository.SaveChangesAsync();
+
+            return book.Id;
+        }
+
+		public async Task<bool> GenreExistsAsync(int genreId)
+		{
+            return await repository.AllReadOnly<Genre>()
+                .AnyAsync(c => c.Id == genreId);
 		}
 
 		public async Task<IEnumerable<BookIndexServiceModel>> LastThreeBooksAsync()

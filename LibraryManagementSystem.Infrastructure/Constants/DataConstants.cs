@@ -17,5 +17,6 @@ namespace LibraryManagementSystem.Infrastructure.Constants
         public const int BookISBNMaxLenght = 13;
         public const int NumberMaxLenght = 13;
         public const int NumberMinLenght = 7;
-    }
+		public const string DateFormat = "dd/MM/yyyy HH:mm";
+	}
 }
