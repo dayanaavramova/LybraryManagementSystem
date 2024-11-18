@@ -25,5 +25,8 @@ namespace LibraryManagementSystem.Core.Contracts
 
         Task<bool> ExistsAsync(int id);
         Task<BookDetailsServiceModel> BookDetailsByIdAsync(int id);
+        Task EditAsync(int bookId, BookFormModel model);
+        Task<bool> HasLibrarianWithIdAsync(int bookid, string userid);
+        Task<BookFormModel?> GetBookFormModelByIdAsync(int id);
     }
 }

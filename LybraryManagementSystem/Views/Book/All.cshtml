@@ -90,8 +90,8 @@
 					{
 						@if (User.Identity.Name == Model.LibrarianName)
 						{
-							<a asp-controller="House" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-warning">Edit</a>
-							<a asp-controller="House" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger">Delete</a>
+							<a asp-controller="Book" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-warning">Edit</a>
+							<a asp-controller="Book" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger">Delete</a>
 							<p></p>
 						}
 						else if (book.IsLoanable)

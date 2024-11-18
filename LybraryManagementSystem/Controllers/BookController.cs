@@ -89,7 +89,7 @@ namespace LibraryManagementSystem.Controllers
 
             if (await bookService.GenreExistsAsync(model.GenreId) == false)
             {
-                ModelState.AddModelError(nameof(model.GenreId), "");
+                ModelState.AddModelError(nameof(model.GenreId), "Category does not exist.");
             }
 
             if (ModelState.IsValid == false)
@@ -110,15 +110,47 @@ namespace LibraryManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            if (await bookService.ExistsAsync(id) == false)
+            {
+                return BadRequest();
+            }
+            if (await bookService.HasLibrarianWithIdAsync(id, GetUserId()) == false)
+            {
+                return Unauthorized();
+            }
+
+            var model = await bookService.GetBookFormModelByIdAsync(id);
+            
+            return View(model);
         }
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, BookFormModel)
+        public async Task<IActionResult> Edit(int id, BookFormModel model)
         {
-            return View();
-        }
+			if (await bookService.ExistsAsync(id) == false)
+			{
+				return BadRequest();
+			}
+			if (await bookService.HasLibrarianWithIdAsync(id, GetUserId()) == false)
+			{
+				return Unauthorized();
+			}
+			if (await bookService.GenreExistsAsync(model.GenreId) == false)
+			{
+				ModelState.AddModelError(nameof(model.GenreId), "Category does not exist.");
+			}
+            if (!ModelState.IsValid)
+            {
+                model.Genres = await bookService.AllGenresAsync();
+
+                return View(model);
+            }
+
+            await bookService.EditAsync(id, model);
+
+			return RedirectToAction(nameof(Details), new { id = id });
+		}
 
 		public string GetUserId()
 		{

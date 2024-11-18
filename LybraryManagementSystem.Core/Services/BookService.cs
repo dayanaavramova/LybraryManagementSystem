@@ -135,6 +135,24 @@ namespace LibraryManagementSystem.Core.Services
             return book.Id;
         }
 
+		public async Task EditAsync(int bookId, BookFormModel model)
+		{
+            var book = await repository.GetByIdAsync<Book>(bookId);
+
+            if (book != null)
+            {
+                book.Title = model.Title;
+                book.Author = model.Author;
+                book.ISBN = model.ISBN;
+                book.PublishedDate = model.PublishedDate;
+                book.CopiesAvailable = model.CopiesAvailable;
+                book.ImageUrl = model.ImageUrl;
+                book.GenreId = model.GenreId;
+
+                await repository.SaveChangesAsync();
+            }
+		}
+
 		public async Task<bool> ExistsAsync(int id)
 		{
 			return await repository.AllReadOnly<Book>()
@@ -145,6 +163,35 @@ namespace LibraryManagementSystem.Core.Services
 		{
             return await repository.AllReadOnly<Genre>()
                 .AnyAsync(c => c.Id == genreId);
+		}
+
+		public async Task<BookFormModel?> GetBookFormModelByIdAsync(int id)
+		{
+            var book = await repository.AllReadOnly<Book>()
+                .Where(b => b.Id == id)
+                .Select(b => new BookFormModel()
+                {
+                    Title = b.Title,
+                    Author = b.Author,
+                    ISBN = b.ISBN,
+                    PublishedDate = b.PublishedDate,
+                    CopiesAvailable = b.CopiesAvailable,
+                    ImageUrl = b.ImageUrl,
+                    GenreId = b.GenreId
+                }).FirstOrDefaultAsync();
+
+            if (book != null)
+            {
+                book.Genres = await AllGenresAsync();
+            }
+
+            return book;
+		}
+
+		public async Task<bool> HasLibrarianWithIdAsync(int bookid, string userid)
+		{
+            return await repository.AllReadOnly<Book>()
+                .AnyAsync(b => b.Id == bookid && b.Librarian.User.Id == userid);
 		}
 
 		public async Task<IEnumerable<BookIndexServiceModel>> LastThreeBooksAsync()
