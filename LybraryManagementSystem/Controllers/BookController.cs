@@ -20,17 +20,33 @@ namespace LibraryManagementSystem.Controllers
             memberService = _memberService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
-        public IActionResult All()
+        public async Task<IActionResult> All([FromQuery]AllBooksQueryModel query)
         {
-            return View();
+            var model = await bookService.AllAsync(query.Genre, query.Sorting, query.CurrentPage, query.BooksPerPage);
+
+            query.TotalBooksCount = model.TotalBooksCount;
+            query.Books = model.Books;
+            query.Genres = await bookService.AllGenresNamesAsync();
+            if (await librarianService.ExistsByIdAsync(GetUserId()))
+            {
+                query.LibrarianName = User.Identity.Name;
+            }
+
+            return View(query);
         }
 
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var model = new AllBooksQueryModel();
+            if (await bookService.ExistsAsync(id) == false)
+            {
+                return BadRequest();
+            }
+
+            var model = await bookService.BookDetailsByIdAsync(id);
 
             return View(model);
         }
@@ -88,6 +104,20 @@ namespace LibraryManagementSystem.Controllers
             int newBookId = await bookService.CreateAsync(model, librarianId ?? 0);
 
 			return RedirectToAction(nameof(Details), new { id = newBookId });
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, BookFormModel)
+        {
+            return View();
         }
 
 		public string GetUserId()

@@ -1,17 +1,10 @@
-﻿using LibraryManagementSystem.Infrastructure.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using static LibraryManagementSystem.Core.Constants.MessageConstants;
 using static LibraryManagementSystem.Infrastructure.Constants.DataConstants;
 
 namespace LibraryManagementSystem.Core.Models.Book
 {
-	public class BookFormModel
+    public class BookFormModel
 	{
 		[Required(ErrorMessage = RequiredMessage)]
 		[StringLength(BookTitleMaxLenght, MinimumLength = BookTitleMinLenght,

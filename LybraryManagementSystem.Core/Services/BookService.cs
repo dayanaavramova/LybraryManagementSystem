@@ -1,6 +1,8 @@
 ﻿using LibraryManagementSystem.Core.Contracts;
+using LibraryManagementSystem.Core.Enumerations;
 using LibraryManagementSystem.Core.Models.Book;
 using LibraryManagementSystem.Core.Models.Home;
+using LibraryManagementSystem.Infrastructure.Constants;
 using LibraryManagementSystem.Infrastructure.Data.Common;
 using LibraryManagementSystem.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +23,47 @@ namespace LibraryManagementSystem.Core.Services
             repository = _repository;
         }
 
-		public async Task<IEnumerable<AllBooksQueryModel>> AllBooksAsync()
+        public async Task<BookQueryServiceModel> AllAsync(string? genre = null, BookSorting sorting = BookSorting.Newest, int currentpage = 1, int booksPerPage = 1)
+        {
+            var booksToShow = repository.AllReadOnly<Book>();
+            
+            if (genre != null)
+            {
+                booksToShow = booksToShow.Where(b => b.Genre.Name == genre);
+            }
+
+            booksToShow = sorting switch
+            {
+                BookSorting.LoanbleFirst => booksToShow
+                .OrderBy(b => b.CopiesAvailable > 0)
+                .ThenByDescending(b => b.Id),
+                _ => booksToShow
+                .OrderByDescending(b => b.Id)
+            };
+
+            var books = await booksToShow
+                .Skip((currentpage - 1) * booksPerPage)
+                .Take(booksPerPage)
+                .Select(b => new BookServiceModel()
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Author = b.Author,
+                    ISBN = b.ISBN,
+                    ImageUrl = b.ImageUrl,
+                    IsLoanable = b.CopiesAvailable > 0
+                }).ToListAsync();
+
+            int totalBooks = await booksToShow.CountAsync();
+
+            return new BookQueryServiceModel()
+            {
+                Books = books,
+                TotalBooksCount = totalBooks
+            };
+        }
+
+        public async Task<IEnumerable<AllBooksQueryModel>> AllBooksAsync()
 		{
 			return await repository
                 .AllReadOnly<Book>()
@@ -39,6 +81,38 @@ namespace LibraryManagementSystem.Core.Services
                     Id = g.Id,
                     Name = g.Name
                 }).ToListAsync();
+		}
+
+        public async Task<IEnumerable<string>> AllGenresNamesAsync()
+        {
+            return await repository.AllReadOnly<Genre>()
+                .Select(g => g.Name)
+                .Distinct().ToListAsync();
+        }
+
+		public async Task<BookDetailsServiceModel> BookDetailsByIdAsync(int id)
+		{
+            return await repository.AllReadOnly<Book>()
+                .Where(b => b.Id == id)
+                .Select(b => new BookDetailsServiceModel()
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Author = b.Author,
+                    ImageUrl = b.ImageUrl,
+                    ISBN = b.ISBN,
+                    IsLoanable = b.CopiesAvailable > 0,
+                    CopiesAvailable = b.CopiesAvailable,
+                    Genre = b.Genre.Name,
+                    DatePublished = b.PublishedDate.ToString(DataConstants.DateFormat),
+                    Librarian = new Models.Librarian.LibrarianServiceModel()
+                    {
+                        PhoneNumber = b.Librarian.PhoneNumber,
+                        Email = b.Librarian.User.Email,
+                        Name = b.Librarian.User.UserName
+                    }
+                })
+                .FirstOrDefaultAsync();
 		}
 
 		public async Task<int> CreateAsync(BookFormModel model, int librarianId)
@@ -60,6 +134,12 @@ namespace LibraryManagementSystem.Core.Services
 
             return book.Id;
         }
+
+		public async Task<bool> ExistsAsync(int id)
+		{
+			return await repository.AllReadOnly<Book>()
+                .AnyAsync(b => b.Id == id);
+		}
 
 		public async Task<bool> GenreExistsAsync(int genreId)
 		{
