@@ -17,6 +17,7 @@ namespace LibraryManagementSystem.Controllers
             librarianService = _librarianService;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Become()
         {
@@ -28,13 +29,14 @@ namespace LibraryManagementSystem.Controllers
             if (await librarianService.UserHasRoleAsync(GetUserId()))
             {
                 return BadRequest();
-			}
+            }
 
             var model = new BecomeLibrarianFormModel();
 
             return View(model);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Become(BecomeLibrarianFormModel model)
         {

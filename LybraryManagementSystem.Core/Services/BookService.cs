@@ -73,6 +73,24 @@ namespace LibraryManagementSystem.Core.Services
                 }).ToListAsync();
 		}
 
+		public async Task<IEnumerable<BookServiceModel>> AllBooksByLibrarianIdAsync(int? librarianId)
+		{
+			var books = await repository.AllReadOnly<Book>()
+                .Where(b => b.LibrarianId == librarianId)
+                .Select(b => new BookServiceModel()
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    Author = b.Author,
+                    ISBN = b.ISBN,
+                    ImageUrl = b.ImageUrl,
+                    IsLoaned = b.IsLoaned
+                })
+                .ToListAsync();
+
+            return books;
+		}
+
 		public async Task<IEnumerable<BookGenreServiceModel>> AllGenresAsync()
 		{
             return await repository.AllReadOnly<Genre>()

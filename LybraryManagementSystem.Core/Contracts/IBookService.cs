@@ -28,5 +28,6 @@ namespace LibraryManagementSystem.Core.Contracts
         Task EditAsync(int bookId, BookFormModel model);
         Task<bool> HasLibrarianWithIdAsync(int bookid, string userid);
         Task<BookFormModel?> GetBookFormModelByIdAsync(int id);
+        Task<IEnumerable<BookServiceModel>> AllBooksByLibrarianIdAsync(int? librarianId);
     }
 }

@@ -152,6 +152,27 @@ namespace LibraryManagementSystem.Controllers
 			return RedirectToAction(nameof(Details), new { id = id });
 		}
 
+        [Authorize]
+        public async Task<IActionResult> Mine()
+        {
+            if (await librarianService.ExistsByIdAsync(GetUserId()))
+            {
+                var currentLibrarianId = await librarianService.GetLibrarianIdAsync(GetUserId());
+
+                var myBooks = await bookService.AllBooksByLibrarianIdAsync(currentLibrarianId);
+
+                return View(myBooks);
+            }
+            else if (await memberService.ExistsByIdAsync(GetUserId()))
+            {
+                return RedirectToAction("Mine", "Loan");
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
 		public string GetUserId()
 		{
 			return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
