@@ -35,7 +35,7 @@ namespace LibraryManagementSystem.Core.Services
             booksToShow = sorting switch
             {
                 BookSorting.LoanbleFirst => booksToShow
-                .OrderBy(b => b.CopiesAvailable > 0)
+                .OrderBy(b => b.IsLoaned == false)
                 .ThenByDescending(b => b.Id),
                 _ => booksToShow
                 .OrderByDescending(b => b.Id)
@@ -51,7 +51,7 @@ namespace LibraryManagementSystem.Core.Services
                     Author = b.Author,
                     ISBN = b.ISBN,
                     ImageUrl = b.ImageUrl,
-                    IsLoanable = b.CopiesAvailable > 0
+                    IsLoaned = b.IsLoaned
                 }).ToListAsync();
 
             int totalBooks = await booksToShow.CountAsync();
@@ -101,8 +101,7 @@ namespace LibraryManagementSystem.Core.Services
                     Author = b.Author,
                     ImageUrl = b.ImageUrl,
                     ISBN = b.ISBN,
-                    IsLoanable = b.CopiesAvailable > 0,
-                    CopiesAvailable = b.CopiesAvailable,
+                    IsLoaned = b.IsLoaned,
                     Genre = b.Genre.Name,
                     DatePublished = b.PublishedDate.ToString(DataConstants.DateFormat),
                     Librarian = new Models.Librarian.LibrarianServiceModel()
@@ -125,7 +124,7 @@ namespace LibraryManagementSystem.Core.Services
                 GenreId = model.GenreId,
                 LibrarianId = librarianId,
                 PublishedDate = model.PublishedDate,
-                CopiesAvailable = model.CopiesAvailable,
+                IsLoaned = false,
                 ImageUrl = model.ImageUrl
             };
 
@@ -145,7 +144,7 @@ namespace LibraryManagementSystem.Core.Services
                 book.Author = model.Author;
                 book.ISBN = model.ISBN;
                 book.PublishedDate = model.PublishedDate;
-                book.CopiesAvailable = model.CopiesAvailable;
+                book.IsLoaned = model.IsLoaned;
                 book.ImageUrl = model.ImageUrl;
                 book.GenreId = model.GenreId;
 
@@ -175,7 +174,7 @@ namespace LibraryManagementSystem.Core.Services
                     Author = b.Author,
                     ISBN = b.ISBN,
                     PublishedDate = b.PublishedDate,
-                    CopiesAvailable = b.CopiesAvailable,
+                    IsLoaned = b.IsLoaned,
                     ImageUrl = b.ImageUrl,
                     GenreId = b.GenreId
                 }).FirstOrDefaultAsync();

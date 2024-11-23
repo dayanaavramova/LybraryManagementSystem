@@ -79,7 +79,7 @@
 					<h4>@book.Title</h4>
 					<h6>Author: <b>@book.Author</b></h6>
 					<h6>ISBN: <b>@book.ISBN</b></h6>
-					<h6>(@(book.IsLoanable ? "Loanable" : "Not Loanable"))</h6>
+					<h6>(@(book.IsLoaned ? "Loaned" : "Not Loaned"))</h6>
 					<br />
 					<a asp-controller="Book"
 				   asp-action="Details"
@@ -94,7 +94,7 @@
 							<a asp-controller="Book" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger">Delete</a>
 							<p></p>
 						}
-						else if (book.IsLoanable)
+						else if (!book.IsLoaned)
 						{
 							<form class="input-group-sm" asp-controller="Book" asp-action="Loan" asp-route-id="@book.Id" method="post">
 								<input class="btn btn-primary" type="submit" value="Loan" />

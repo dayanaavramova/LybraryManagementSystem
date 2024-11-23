@@ -21,8 +21,8 @@ namespace LibraryManagementSystem.Core.Models.Book
 		public string ISBN { get; set; } = null!;
 
 		[Required(ErrorMessage = RequiredMessage)]
-		[Display(Name = "Copies Available")]
-		public int CopiesAvailable { get; set; }
+		[Display(Name = "Is Loaned")]
+		public bool IsLoaned { get; set; }
 
 		[Required(ErrorMessage = RequiredMessage)]
 		[Display(Name = "Image URL")]

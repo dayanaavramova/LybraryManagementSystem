@@ -26,7 +26,7 @@ namespace LibraryManagementSystem.Core.Models.Book
         [StringLength(BookISBNMaxLenght, ErrorMessage = LengthMessage)]
         public string ISBN { get; set; } = string.Empty;
 
-        [Display(Name = "Is Loanable")]
-        public bool IsLoanable { get; set; }
+        [Display(Name = "Is Loaned")]
+        public bool IsLoaned { get; set; }
     }
 }

@@ -14,9 +14,6 @@ namespace LibraryManagementSystem.Core.Models.Book
 
         public LibrarianServiceModel Librarian { get; set; }
 
-		[Display(Name = "Copies Available")]
-        public int CopiesAvailable { get; set; }
-
 		[Display(Name = "Published on")]
         public string DatePublished { get; set; }
     }

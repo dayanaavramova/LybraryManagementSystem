@@ -42,7 +42,7 @@ namespace LibraryManagementSystem.Infrastructure.Data.Models
         public DateTime PublishedDate { get; set; }
 
         [Required]
-        public int CopiesAvailable { get; set; }
+        public bool IsLoaned { get; set; }
 
         [Required]
         public string ImageUrl { get; set; } = string.Empty;

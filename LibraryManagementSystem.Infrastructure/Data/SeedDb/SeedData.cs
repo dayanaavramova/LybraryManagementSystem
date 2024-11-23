@@ -116,7 +116,7 @@ namespace LibraryManagementSystem.Infrastructure.Data.SeedDb
                 Author = "Leigh Bardugo",
                 ISBN = "1830173902204",
                 PublishedDate = new DateTime(2015, 9, 29),
-                CopiesAvailable = 3,
+                IsLoaned = true,
                 ImageUrl = "https://books.google.bg/books/publisher/content?id=yhIRBwAAQBAJ&hl=bg&pg=PP1&img=1&zoom=3&sig=ACfU3U1UBl05osmdBHZtH4PylujGV0zAFw&w=1280",
                 GenreId = FantasyGenre.Id,
                 LibrarianId = Librarian.Id
@@ -129,7 +129,7 @@ namespace LibraryManagementSystem.Infrastructure.Data.SeedDb
                 Author = "Douglas Adams",
                 ISBN = "0174927459174",
                 PublishedDate = new DateTime(1980, 10,12),
-                CopiesAvailable = 5,
+				IsLoaned = false,
                 ImageUrl = "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTBZT4WfTCYmJLT8wqhEIaq87cO3rolDE_DWbp7ayWG5Y9TO2u_",
                 GenreId = ScifiGenre.Id,
                 LibrarianId = Librarian.Id
@@ -142,7 +142,7 @@ namespace LibraryManagementSystem.Infrastructure.Data.SeedDb
                 Author = "Casey McQuiston",
                 ISBN = "5819367426382",
                 PublishedDate = new DateTime(2019, 5, 14),
-                CopiesAvailable = 2,
+				IsLoaned = false,
                 ImageUrl = "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRmtxGyRnwNGSJGZ7nxBHdY8jfCJx3jdJDX9IKYile0ch7KY07G",
                 GenreId = RomanceGenre.Id,
                 LibrarianId = Librarian.Id

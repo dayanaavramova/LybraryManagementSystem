@@ -19,15 +19,14 @@
 				<p>Author: <b>@Model.Author</b></p>
 				<p>ISBN: <b>@Model.ISBN</b></p>
 				<p>Published on: <b>@Model.DatePublished</b></p>
-				<p>Copies Available: <b>@Model.CopiesAvailable</b></p>
-				<p><i>(@(Model.IsLoanable ? "Loanable" : "Not Loanable"))</i></p> 
+				<p><i>(@(Model.IsLoaned ? "Loaned" : "Not Loaned"))</i></p> 
 					<div class="form-inline"> 
 						@if (this.User.Identity.IsAuthenticated && User.Identity.Name == Model.Librarian.Name)
 						{
 							<a class="btn btn-warning" asp-controller="Book" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> 
 							<a class="ml-2 btn btn-danger" asp-controller="Book" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
 						}
-						else if (!Model.IsLoanable)
+						else if (!Model.IsLoaned)
 						{
 							<form class="ml-2" asp-controller="Book" asp-action="Loan" asp-route-id="@Model.Id" method="post"> <input class="btn btn-primary" type="submit" value="Loan" /> </form>
 						}
