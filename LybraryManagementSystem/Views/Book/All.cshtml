@@ -86,6 +86,11 @@
 				   asp-route-id="@book.Id" class="btn btn-success">
 						Details
 					</a>
+					<a asp-controller="Review"
+				   asp-action="All"
+				   asp-route-id="@book.Id" class="btn btn-success">
+						Reviews
+					</a>
 					@if (this.User.Identity.IsAuthenticated)
 					{
 						@if (User.Identity.Name == Model.LibrarianName)
@@ -96,6 +101,7 @@
 						}
 						else if (!book.IsLoaned)
 						{
+							<a asp-controller="Review" asp-action="Add" asp-route-id="@book.Id" class="btn btn-primary">Add Review</a>
 							<form class="ml-2" asp-controller="Book" asp-action="Loan" asp-route-id="@book.Id" method="post"> <input class="btn btn-primary" type="submit" value="Loan" /> </form>
 						}
 						else

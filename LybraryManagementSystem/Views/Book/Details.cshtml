@@ -21,13 +21,18 @@
 				<p>Published on: <b>@Model.DatePublished</b></p>
 				<p><i>(@(Model.IsLoaned ? "Loaned" : "Not Loaned"))</i></p> 
 					<div class="form-inline"> 
-						@if (this.User.Identity.IsAuthenticated && User.Identity.Name == Model.Librarian.Name)
+						@if (this.User.Identity.IsAuthenticated)
 						{
-							<a class="btn btn-warning" asp-controller="Book" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> 
+							<a asp-controller="Review" asp-action="All" asp-route-id="@Model.Id" class="btn btn-success"> Reviews</a>
+						}
+						else if (User.Identity.Name == Model.Librarian.Name)
+						{
+							<a class="btn btn-warning" asp-controller="Book" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
 							<a class="ml-2 btn btn-danger" asp-controller="Book" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
 						}
 						else if (!Model.IsLoaned)
 						{
+							<a asp-controller="Review" asp-action="Add" asp-route-id="@book.Id" class="btn btn-primary">Add Review</a>
 							<form class="ml-2" asp-controller="Book" asp-action="Loan" asp-route-id="@Model.Id" method="post"> <input class="btn btn-primary" type="submit" value="Loan" /> </form>
 						}
 						else

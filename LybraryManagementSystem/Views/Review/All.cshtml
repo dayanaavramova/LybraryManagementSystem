@@ -1,0 +1,45 @@
+﻿@using LibraryManagementSystem.Core.Models.Review;
+@model AllReviewsModel
+
+@{
+	ViewBag.Title = "Reviews";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+
+<hr />
+
+@if (!Model.Reviews.Any())
+{
+	<h2 class="text-center">No reviews found for this book!</h2>
+}
+<div class="row">
+	@foreach (var review in Model.Reviews)
+	{
+		<div class="col-md-4">
+
+			<div class="card mb-3">
+				<img class="card-img-top" src="@review.Book.ImageUrl" alt="Book Image">
+				<div class="card-body text-center">
+					<h6>Book Title: <b>@review.Book.Title</b></h6
+					<h6>Rating: <b>@review.Rating</b></h6>
+					<h6>Comment: <b>@review.Comment</b></h6>
+					<br />
+					<a asp-controller="Book"
+				   asp-action="Details"
+				   asp-route-id="@review.Book.Id" class="btn btn-success">
+						Details
+					</a>
+					<p></p>
+					<div class="card" style="width: 18rem;">
+						<div class="card-body">
+							<h5 class="card-title">Member Info</h5>
+							<p class="card-text">Email: @review.Member.Email</p>
+							<p class="card-text">Name: @review.Member.Name</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+</div>
