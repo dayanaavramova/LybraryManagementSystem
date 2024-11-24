@@ -11,6 +11,6 @@ namespace LibraryManagementSystem.Core.Contracts
 	public interface IReviewService
 	{
 		Task<AllReviewsModel> ReviewsByBookIdAsync(int bookId);
-		Task<int> CreateAsync(ReviewFormModel model, int memberId);
+		Task<int> CreateAsync(int bookId, ReviewFormModel model, int memberId);
 	}
 }

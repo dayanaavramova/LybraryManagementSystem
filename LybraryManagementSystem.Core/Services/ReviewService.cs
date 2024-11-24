@@ -20,9 +20,20 @@ namespace LibraryManagementSystem.Core.Services
 			repository = _repository;
 		}
 
-		public Task<int> CreateAsync(ReviewFormModel model, int memberId)
+		public async Task<int> CreateAsync(int bookId, ReviewFormModel model, int memberId)
 		{
-			throw new NotImplementedException();
+			Review review = new Review()
+			{
+				Rating = model.Rating,
+				Comment = model.Comment,
+				MemberId = memberId,
+				BookId = bookId
+			};
+
+			await repository.AddAsync(review);
+			await repository.SaveChangesAsync();
+
+			return review.BookId;
 		}
 
 		public async Task<AllReviewsModel> ReviewsByBookIdAsync(int bookId)
