@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LibraryManagementSystem.Infrastructure.Data.SeedDb
 {
-    internal class LoanConfiguration : IEntityTypeConfiguration<Loan>
+    internal class ReviewConfiguration : IEntityTypeConfiguration<Review>
     {
-        public void Configure(EntityTypeBuilder<Loan> builder)
+        public void Configure(EntityTypeBuilder<Review> builder)
         {
             var data = new SeedData();
-            builder.HasData(new Loan[] { data.FirstLoan });
+            builder.HasData(new Review[] { data.FirstReview });
         }
     }
 }

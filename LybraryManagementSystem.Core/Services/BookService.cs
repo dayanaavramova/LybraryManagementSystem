@@ -6,15 +6,10 @@ using LibraryManagementSystem.Infrastructure.Constants;
 using LibraryManagementSystem.Infrastructure.Data.Common;
 using LibraryManagementSystem.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LibraryManagementSystem.Core.Services
 {
-    public class BookService : IBookService
+	public class BookService : IBookService
     {
         private readonly IRepository repository;
 
@@ -211,7 +206,13 @@ namespace LibraryManagementSystem.Core.Services
                 .AnyAsync(b => b.Id == bookid && b.Librarian.User.Id == userid);
 		}
 
-		public async Task<IEnumerable<BookIndexServiceModel>> LastThreeBooksAsync()
+		public async Task<bool> IsBookLoanedAsync(int bookId)
+        {
+            return await repository.AllReadOnly<Book>()
+                .AnyAsync(b => b.Id == bookId && b.IsLoaned == true);
+        }
+
+        public async Task<IEnumerable<BookIndexServiceModel>> LastThreeBooksAsync()
         {
             return await repository
                 .AllReadOnly<Book>()

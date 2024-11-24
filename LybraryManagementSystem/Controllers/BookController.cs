@@ -1,13 +1,12 @@
 ﻿using LibraryManagementSystem.Core.Contracts;
 using LibraryManagementSystem.Core.Models.Book;
-using LibraryManagementSystem.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace LibraryManagementSystem.Controllers
 {
-    public class BookController : Controller
+	public class BookController : Controller
     {
         private readonly IBookService bookService;
         private readonly ILibrarianService librarianService;
@@ -165,7 +164,7 @@ namespace LibraryManagementSystem.Controllers
             }
             else if (await memberService.ExistsByIdAsync(GetUserId()))
             {
-                return RedirectToAction("Mine", "Loan");
+                return View();
             }
             else
             {

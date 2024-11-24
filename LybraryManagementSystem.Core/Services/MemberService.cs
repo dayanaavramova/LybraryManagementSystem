@@ -43,5 +43,11 @@ namespace LibraryManagementSystem.Core.Services
 			return await repository.AllReadOnly<Member>()
 				.AnyAsync(a => a.PhoneNumber == phoneNumber);
 		}
+
+		public async Task<int?> GetMemberIdAsync(string userId)
+		{
+			return (await repository.AllReadOnly<Member>()
+				.FirstOrDefaultAsync(m => m.UserId == userId))?.Id;
+		}
 	}
 }

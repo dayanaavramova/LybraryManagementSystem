@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241116085124_ReservationsAdded")]
-    partial class ReservationsAdded
+    [Migration("20241124083930_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,9 +37,6 @@ namespace LibraryManagementSystem.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("CopiesAvailable")
-                        .HasColumnType("int");
-
                     b.Property<int>("GenreId")
                         .HasColumnType("int");
 
@@ -52,7 +49,13 @@ namespace LibraryManagementSystem.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsLoaned")
+                        .HasColumnType("bit");
+
                     b.Property<int>("LibrarianId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LoanerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PublishedDate")
@@ -69,6 +72,8 @@ namespace LibraryManagementSystem.Infrastructure.Migrations
 
                     b.HasIndex("LibrarianId");
 
+                    b.HasIndex("LoanerId");
+
                     b.ToTable("Books");
 
                     b.HasData(
@@ -76,11 +81,12 @@ namespace LibraryManagementSystem.Infrastructure.Migrations
                         {
                             Id = 1,
                             Author = "Leigh Bardugo",
-                            CopiesAvailable = 3,
                             GenreId = 1,
                             ISBN = "1830173902204",
                             ImageUrl = "https://books.google.bg/books/publisher/content?id=yhIRBwAAQBAJ&hl=bg&pg=PP1&img=1&zoom=3&sig=ACfU3U1UBl05osmdBHZtH4PylujGV0zAFw&w=1280",
+                            IsLoaned = true,
                             LibrarianId = 1,
+                            LoanerId = 1,
                             PublishedDate = new DateTime(2015, 9, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Six of Crows"
                         },
@@ -88,10 +94,10 @@ namespace LibraryManagementSystem.Infrastructure.Migrations
                         {
                             Id = 2,
                             Author = "Douglas Adams",
-                            CopiesAvailable = 5,
                             GenreId = 2,
                             ISBN = "0174927459174",
                             ImageUrl = "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTBZT4WfTCYmJLT8wqhEIaq87cO3rolDE_DWbp7ayWG5Y9TO2u_",
+                            IsLoaned = false,
                             LibrarianId = 1,
                             PublishedDate = new DateTime(1980, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "The Hitchhiker's Guide to the Galaxy"
@@ -100,10 +106,10 @@ namespace LibraryManagementSystem.Infrastructure.Migrations
                         {
                             Id = 3,
                             Author = "Casey McQuiston",
-                            CopiesAvailable = 2,
                             GenreId = 3,
                             ISBN = "5819367426382",
                             ImageUrl = "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRmtxGyRnwNGSJGZ7nxBHdY8jfCJx3jdJDX9IKYile0ch7KY07G",
+                            IsLoaned = false,
                             LibrarianId = 1,
                             PublishedDate = new DateTime(2019, 5, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Red, White & Royal Blue"
@@ -169,6 +175,9 @@ namespace LibraryManagementSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Librarians");
@@ -179,41 +188,6 @@ namespace LibraryManagementSystem.Infrastructure.Migrations
                             Id = 1,
                             PhoneNumber = "+359888888888",
                             UserId = "dea12856-c198-4129-b3f3-b893d8395082"
-                        });
-                });
-
-            modelBuilder.Entity("LibraryManagementSystem.Infrastructure.Data.Models.Loan", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MemberId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ReturnDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("MemberId");
-
-                    b.ToTable("Loans");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            BookId = 1,
-                            MemberId = 1,
-                            ReturnDate = new DateTime(2025, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -238,6 +212,9 @@ namespace LibraryManagementSystem.Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -281,6 +258,47 @@ namespace LibraryManagementSystem.Infrastructure.Migrations
                             Id = 1,
                             BookId = 1,
                             MemberId = 1
+                        });
+                });
+
+            modelBuilder.Entity("LibraryManagementSystem.Infrastructure.Data.Models.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("MemberId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("Reviews");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BookId = 1,
+                            Comment = "Amazing world-building. Fenomenal characters. I loved it! Would recommend!",
+                            MemberId = 1,
+                            Rating = 5
                         });
                 });
 
@@ -405,15 +423,15 @@ namespace LibraryManagementSystem.Infrastructure.Migrations
                         {
                             Id = "dea12856-c198-4129-b3f3-b893d8395082",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "40df5984-a425-4024-a608-fd75a87836ba",
+                            ConcurrencyStamp = "dde222d2-03fe-4170-a492-689c1db4dfbb",
                             Email = "librarian@mail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "librarian@mail.com",
                             NormalizedUserName = "librarian@mail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDW38nlsuTla2AWaj9PczmHsgivmUX4RQhoeIbDyMih0HL4LCeZ4tDsx+nWVv+8URw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEFNNaN8eCbG9ofhrYrWBxyagNqMWCgPPWLSZgG0MQ5nn+7inzkIqeRlHJa0znkEog==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "8240b448-d8c0-4d28-8766-37464cacf1f3",
+                            SecurityStamp = "92fedfc9-f25d-4824-b300-0903d5a53e31",
                             TwoFactorEnabled = false,
                             UserName = "librarian@mail.com"
                         },
@@ -421,15 +439,15 @@ namespace LibraryManagementSystem.Infrastructure.Migrations
                         {
                             Id = "6d5800ce-d726-4fc8-83d9-d6b3ac1f591e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "58a572c6-be08-4648-8712-349e6dc4a7c9",
+                            ConcurrencyStamp = "1bf39094-5997-4993-90c7-19c6cbc4fb2c",
                             Email = "member@mail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "member@mail.com",
                             NormalizedUserName = "member@mail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJIvD7KmLmcP6P/95pdqk5T4kMhWkjvGQEZs2GuVdImff65zi7IWzBWHO0lz+NhaQA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKel9cMllZBVbBdqZG9t/Fb1//rojIonWI4SIxDJRN9qpPt6RG/gGzPz5hLayrGDhQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fe1bb83f-b301-405c-bbef-a4745f0e0707",
+                            SecurityStamp = "68839c9a-eb7d-4418-990d-20a525e906f6",
                             TwoFactorEnabled = false,
                             UserName = "member@mail.com"
                         });
@@ -534,9 +552,15 @@ namespace LibraryManagementSystem.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("LibraryManagementSystem.Infrastructure.Data.Models.Member", "Loaner")
+                        .WithMany("LoanedBooks")
+                        .HasForeignKey("LoanerId");
+
                     b.Navigation("Genre");
 
                     b.Navigation("Librarian");
+
+                    b.Navigation("Loaner");
                 });
 
             modelBuilder.Entity("LibraryManagementSystem.Infrastructure.Data.Models.Librarian", b =>
@@ -548,25 +572,6 @@ namespace LibraryManagementSystem.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("LibraryManagementSystem.Infrastructure.Data.Models.Loan", b =>
-                {
-                    b.HasOne("LibraryManagementSystem.Infrastructure.Data.Models.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LibraryManagementSystem.Infrastructure.Data.Models.Member", "Member")
-                        .WithMany("Loans")
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-
-                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("LibraryManagementSystem.Infrastructure.Data.Models.Member", b =>
@@ -590,6 +595,25 @@ namespace LibraryManagementSystem.Infrastructure.Migrations
 
                     b.HasOne("LibraryManagementSystem.Infrastructure.Data.Models.Member", "Member")
                         .WithMany("Reservations")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Member");
+                });
+
+            modelBuilder.Entity("LibraryManagementSystem.Infrastructure.Data.Models.Review", b =>
+                {
+                    b.HasOne("LibraryManagementSystem.Infrastructure.Data.Models.Book", "Book")
+                        .WithMany("Reviews")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LibraryManagementSystem.Infrastructure.Data.Models.Member", "Member")
+                        .WithMany("Reviews")
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -653,6 +677,8 @@ namespace LibraryManagementSystem.Infrastructure.Migrations
             modelBuilder.Entity("LibraryManagementSystem.Infrastructure.Data.Models.Book", b =>
                 {
                     b.Navigation("Reservations");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("LibraryManagementSystem.Infrastructure.Data.Models.Genre", b =>
@@ -662,9 +688,11 @@ namespace LibraryManagementSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("LibraryManagementSystem.Infrastructure.Data.Models.Member", b =>
                 {
-                    b.Navigation("Loans");
+                    b.Navigation("LoanedBooks");
 
                     b.Navigation("Reservations");
+
+                    b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618
         }

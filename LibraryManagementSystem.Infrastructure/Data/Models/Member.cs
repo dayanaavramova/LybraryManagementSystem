@@ -31,7 +31,10 @@ namespace LibraryManagementSystem.Infrastructure.Data.Models
         [ForeignKey(nameof(UserId))]
         public IdentityUser User { get; set; } = null!;
 
-        public IEnumerable<Loan> Loans { get; set; } = new List<Loan>();
+        public IEnumerable<Book> LoanedBooks { get; set; } = new List<Book>();
+
         public IEnumerable<Reservation> Reservations { get; set; } = new List<Reservation>();
+
+        public IEnumerable<Review> Reviews { get; set; } = new List<Review>();
     }
 }

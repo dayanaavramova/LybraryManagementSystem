@@ -17,6 +17,10 @@ namespace LibraryManagementSystem.Infrastructure.Constants
         public const int BookISBNMaxLenght = 13;
         public const int NumberMaxLenght = 13;
         public const int NumberMinLenght = 7;
+        public const int CommentMaxLenght = 500;
+        public const int CommentMinLenght = 10;
+        public const int RatingMinValue = 1;
+        public const int RatingMaxValue = 5;
 		public const string DateFormat = "dd/MM/yyyy HH:mm";
 	}
 }

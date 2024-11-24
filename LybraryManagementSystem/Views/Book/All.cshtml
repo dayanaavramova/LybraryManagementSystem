@@ -96,15 +96,11 @@
 						}
 						else if (!book.IsLoaned)
 						{
-							<form class="input-group-sm" asp-controller="Book" asp-action="Loan" asp-route-id="@book.Id" method="post">
-								<input class="btn btn-primary" type="submit" value="Loan" />
-							</form>
+							<a asp-controller="Book" asp-action="Loan" asp-route-id="@book.Id" class="btn btn-warning">Loan</a>
 						}
 						else
 						{
-							<form asp-controller="Book" asp-action="Return" asp-route-id="@book.Id" method="post">
-								<input class="btn btn-primary" type="submit" value="Return" />
-							</form>
+							<a asp-controller="Book" asp-action="Return" asp-route-id="@book.Id" class="btn btn-danger">Return</a>
 						}
 					}
 				</div>

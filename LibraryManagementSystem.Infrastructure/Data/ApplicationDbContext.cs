@@ -19,8 +19,8 @@ namespace LibraryManagementSystem.Infrastructure.Data
             builder.ApplyConfiguration(new MemberConfiguration());
             builder.ApplyConfiguration(new GenreConfiguration());
             builder.ApplyConfiguration(new BookConfiguration());
-            builder.ApplyConfiguration(new LoanConfiguration());
             builder.ApplyConfiguration(new ReservationConfiguration());
+            builder.ApplyConfiguration(new ReviewConfiguration());
 
 
             base.OnModelCreating(builder);
@@ -29,7 +29,7 @@ namespace LibraryManagementSystem.Infrastructure.Data
         public DbSet<Book> Books { get; set; } = null!;
         public DbSet<Genre> Genres { get; set; } = null!;
         public DbSet<Librarian> Librarians { get; set; } = null!;
-        public DbSet<Loan> Loans { get; set; } = null!;
+        public DbSet<Review> Reviews { get; set; } = null!;
         public DbSet<Member> Members { get; set; } = null!;
         public DbSet<Reservation> Reservations { get; set; } = null!;
     }

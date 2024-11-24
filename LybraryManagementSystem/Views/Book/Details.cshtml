@@ -28,11 +28,11 @@
 						}
 						else if (!Model.IsLoaned)
 						{
-							<form class="ml-2" asp-controller="Book" asp-action="Loan" asp-route-id="@Model.Id" method="post"> <input class="btn btn-primary" type="submit" value="Loan" /> </form>
+							<form class="ml-2" asp-controller="Loan" asp-action="Add" asp-route-id="@Model.Id" method="post"> <input class="btn btn-primary" type="submit" value="Loan" /> </form>
 						}
 						else
 						{
-							<form class="ml-2" asp-controller="Book" asp-action="Return" asp-route-id="@Model.Id" method="post"> <input class="btn btn-primary" type="submit" value="Return" /> </form>
+							<form class="ml-2" asp-controller="Loan" asp-action="Return" asp-route-id="@Model.Id" method="post"> <input class="btn btn-primary" type="submit" value="Return" /> </form>
 						} 
 				
 					</div> 

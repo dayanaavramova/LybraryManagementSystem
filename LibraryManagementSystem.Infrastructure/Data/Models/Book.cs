@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -44,9 +45,16 @@ namespace LibraryManagementSystem.Infrastructure.Data.Models
         [Required]
         public bool IsLoaned { get; set; }
 
-        [Required]
+		
+		public int? LoanerId { get; set; }
+
+		[ForeignKey(nameof(LoanerId))]
+		public Member? Loaner { get; set; }
+
+		[Required]
         public string ImageUrl { get; set; } = string.Empty;
 
         public IEnumerable<Reservation> Reservations { get; set; } = new List<Reservation>();
-    }
+        public IEnumerable<Review> Reviews { get; set; } = new List<Review>();
+	}
 }

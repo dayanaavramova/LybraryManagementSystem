@@ -1,15 +1,10 @@
 ﻿using LibraryManagementSystem.Core.Enumerations;
 using LibraryManagementSystem.Core.Models.Book;
 using LibraryManagementSystem.Core.Models.Home;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LibraryManagementSystem.Core.Contracts
 {
-    public interface IBookService
+	public interface IBookService
     {
         Task<IEnumerable<BookIndexServiceModel>> LastThreeBooksAsync();
         Task<IEnumerable<AllBooksQueryModel>> AllBooksAsync();
@@ -29,5 +24,7 @@ namespace LibraryManagementSystem.Core.Contracts
         Task<bool> HasLibrarianWithIdAsync(int bookid, string userid);
         Task<BookFormModel?> GetBookFormModelByIdAsync(int id);
         Task<IEnumerable<BookServiceModel>> AllBooksByLibrarianIdAsync(int? librarianId);
-    }
+		Task<bool> IsBookLoanedAsync(int bookId);
+
+	}
 }

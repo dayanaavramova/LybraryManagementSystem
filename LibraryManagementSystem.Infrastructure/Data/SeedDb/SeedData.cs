@@ -16,7 +16,7 @@ namespace LibraryManagementSystem.Infrastructure.Data.SeedDb
         public Book FirstBook { get; set; }
         public Book SecondBook { get; set; }
         public Book ThirdBook { get; set; }
-        public Loan FirstLoan { get; set; }
+        public Review FirstReview { get; set; }
         public Reservation FirstReservation { get; set; }
 
         public SeedData()
@@ -26,7 +26,7 @@ namespace LibraryManagementSystem.Infrastructure.Data.SeedDb
             SeedLibrarian();
             SeedGenre();
             SeedBooks();
-            SeedLoans();
+            SeedReviews();
             SeedReservations();
         }
 
@@ -117,6 +117,7 @@ namespace LibraryManagementSystem.Infrastructure.Data.SeedDb
                 ISBN = "1830173902204",
                 PublishedDate = new DateTime(2015, 9, 29),
                 IsLoaned = true,
+                LoanerId = Member.Id,
                 ImageUrl = "https://books.google.bg/books/publisher/content?id=yhIRBwAAQBAJ&hl=bg&pg=PP1&img=1&zoom=3&sig=ACfU3U1UBl05osmdBHZtH4PylujGV0zAFw&w=1280",
                 GenreId = FantasyGenre.Id,
                 LibrarianId = Librarian.Id
@@ -149,14 +150,15 @@ namespace LibraryManagementSystem.Infrastructure.Data.SeedDb
             };
         }
 
-        private void SeedLoans()
+        private void SeedReviews()
         {
-            FirstLoan = new Loan()
+			FirstReview = new Review()
             {
                 Id = 1,
                 BookId = FirstBook.Id,
                 MemberId = Member.Id,
-                ReturnDate = new DateTime(2025, 3, 10)
+                Rating = 5,
+                Comment = "Amazing world-building. Fenomenal characters. I loved it! Would recommend!"
             };
         }
 
