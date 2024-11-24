@@ -25,17 +25,6 @@
 					<h6>ISBN: <b>@book.ISBN</b></h6>
 					<h6>(@(book.IsLoaned ? "Loaned" : "Not Loaned"))</h6>
 					<br />
-					<a asp-controller="Book"
-				   asp-action="Details"
-				   asp-route-id="@book.Id" class="btn btn-success">
-						Details
-					</a>
-					@if (this.User.Identity.IsAuthenticated)
-					{
-						<a asp-controller="Book" asp-action="Edit" asp-route-id="@book.Id" class="btn btn-warning">Edit</a>
-						<a asp-controller="Book" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger">Delete</a>
-						<p></p>
-					}
 				</div>
 			</div>
 		</div>

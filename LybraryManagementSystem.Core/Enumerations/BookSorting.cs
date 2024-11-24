@@ -9,6 +9,6 @@ namespace LibraryManagementSystem.Core.Enumerations
     public enum BookSorting
     {
         Newest = 0,
-        LoanbleFirst = 1
+        LoanbleFirst = 2
     }
 }

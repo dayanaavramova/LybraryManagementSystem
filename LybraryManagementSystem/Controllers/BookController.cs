@@ -164,13 +164,64 @@ namespace LibraryManagementSystem.Controllers
             }
             else if (await memberService.ExistsByIdAsync(GetUserId()))
             {
-                return View();
-            }
+				var currentMemberId = await memberService.GetMemberIdAsync(GetUserId());
+
+				var myBooks = await bookService.AllBooksByMemberIdAsync(currentMemberId);
+
+                return View(myBooks);
+			}
             else
             {
                 return BadRequest();
             }
         }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Loan(int id)
+        {
+			if (await bookService.ExistsAsync(id) == false)
+			{
+				return BadRequest();
+			}
+			if (await librarianService.ExistsByIdAsync(GetUserId()))
+            {
+                return Unauthorized();
+            }
+            if (await bookService.IsBookLoanedAsync(id))
+            {
+                return BadRequest();
+			}
+
+            var currentMemberId = memberService.GetMemberIdAsync(GetUserId()).Result;
+            if (currentMemberId == null)
+            {
+               return Unauthorized();
+            }
+
+            await bookService.LoanAsync(id, currentMemberId ?? 0);
+
+            return RedirectToAction(nameof(Mine));
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Return(int id)
+        {
+            var memberId = memberService.GetMemberIdAsync(GetUserId()).Result;
+			if (await bookService.ExistsAsync(id) == false)
+			{
+				return BadRequest();
+			}
+            if (await bookService.IsBookLoanedByMemberWithIdAsync(id, memberId) == false)
+            {
+                return Unauthorized();
+            }
+
+            await bookService.ReturnAsync(id);
+
+			return RedirectToAction(nameof(All));
+		}
 
 		public string GetUserId()
 		{

@@ -5,7 +5,9 @@ using LibraryManagementSystem.Core.Models.Home;
 using LibraryManagementSystem.Infrastructure.Constants;
 using LibraryManagementSystem.Infrastructure.Data.Common;
 using LibraryManagementSystem.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace LibraryManagementSystem.Core.Services
 {
@@ -30,9 +32,8 @@ namespace LibraryManagementSystem.Core.Services
             booksToShow = sorting switch
             {
                 BookSorting.LoanbleFirst => booksToShow
-                .OrderBy(b => b.IsLoaned == false)
-                .ThenByDescending(b => b.Id),
-                _ => booksToShow
+                .OrderBy(b => b.IsLoaned == true),
+                BookSorting.Newest => booksToShow
                 .OrderByDescending(b => b.Id)
             };
 
@@ -84,6 +85,24 @@ namespace LibraryManagementSystem.Core.Services
                 .ToListAsync();
 
             return books;
+		}
+
+		public async Task<IEnumerable<BookServiceModel>> AllBooksByMemberIdAsync(int? memberId)
+		{
+			var books = await repository.AllReadOnly<Book>()
+				.Where(b => b.LoanerId == memberId)
+				.Select(b => new BookServiceModel()
+				{
+					Id = b.Id,
+					Title = b.Title,
+					Author = b.Author,
+					ISBN = b.ISBN,
+					ImageUrl = b.ImageUrl,
+					IsLoaned = b.IsLoaned
+				})
+				.ToListAsync();
+
+			return books;
 		}
 
 		public async Task<IEnumerable<BookGenreServiceModel>> AllGenresAsync()
@@ -147,6 +166,11 @@ namespace LibraryManagementSystem.Core.Services
             return book.Id;
         }
 
+		public async Task DeleteAsync(int id)
+		{
+			
+		}
+
 		public async Task EditAsync(int bookId, BookFormModel model)
 		{
             var book = await repository.GetByIdAsync<Book>(bookId);
@@ -168,7 +192,7 @@ namespace LibraryManagementSystem.Core.Services
 		public async Task<bool> ExistsAsync(int id)
 		{
 			return await repository.AllReadOnly<Book>()
-                .AnyAsync(b => b.Id == id);
+				.AnyAsync(b => b.Id == id);
 		}
 
 		public async Task<bool> GenreExistsAsync(int genreId)
@@ -208,11 +232,33 @@ namespace LibraryManagementSystem.Core.Services
 
 		public async Task<bool> IsBookLoanedAsync(int bookId)
         {
-            return await repository.AllReadOnly<Book>()
-                .AnyAsync(b => b.Id == bookId && b.IsLoaned == true);
-        }
+			bool result = false;
 
-        public async Task<IEnumerable<BookIndexServiceModel>> LastThreeBooksAsync()
+			var book = await repository.GetByIdAsync<Book>(bookId);
+
+			if (book != null)
+			{
+				result = book.IsLoaned == true;
+			}
+
+			return result ;
+		}
+
+		public async Task<bool> IsBookLoanedByMemberWithIdAsync(int bookId, int? memberId)
+		{
+            bool result = false;
+
+            var book = await repository.GetByIdAsync<Book>(bookId);
+
+            if (book != null)
+            {
+                result = book.LoanerId == memberId;
+            }
+
+            return result;
+		}
+
+		public async Task<IEnumerable<BookIndexServiceModel>> LastThreeBooksAsync()
         {
             return await repository
                 .AllReadOnly<Book>()
@@ -225,5 +271,31 @@ namespace LibraryManagementSystem.Core.Services
                     ImageUrl = b.ImageUrl
                 }).ToListAsync();
         }
-    }
+
+		public async Task LoanAsync(int bookId, int memberId)
+		{
+            var book = await repository.GetByIdAsync<Book>(bookId);
+
+            if (book != null)
+            {
+                book.LoanerId = memberId;
+                book.IsLoaned = true;
+
+                await repository.SaveChangesAsync();
+            }
+		}
+
+		public async Task ReturnAsync(int id)
+		{
+			var book = await repository.GetByIdAsync<Book>(id);
+
+			if (book != null)
+			{
+				book.LoanerId = null;
+				book.IsLoaned = false;
+
+				await repository.SaveChangesAsync();
+			}
+		}
+	}
 }

@@ -24,7 +24,11 @@ namespace LibraryManagementSystem.Core.Contracts
         Task<bool> HasLibrarianWithIdAsync(int bookid, string userid);
         Task<BookFormModel?> GetBookFormModelByIdAsync(int id);
         Task<IEnumerable<BookServiceModel>> AllBooksByLibrarianIdAsync(int? librarianId);
+		Task<IEnumerable<BookServiceModel>> AllBooksByMemberIdAsync(int? memberId);
 		Task<bool> IsBookLoanedAsync(int bookId);
-
+        Task<bool> IsBookLoanedByMemberWithIdAsync(int bookId, int? memberId);
+        Task LoanAsync(int bookId, int memberId);
+        Task ReturnAsync(int id);
+        Task DeleteAsync(int id);
 	}
 }

@@ -96,11 +96,11 @@
 						}
 						else if (!book.IsLoaned)
 						{
-							<a asp-controller="Book" asp-action="Loan" asp-route-id="@book.Id" class="btn btn-warning">Loan</a>
+							<form class="ml-2" asp-controller="Book" asp-action="Loan" asp-route-id="@book.Id" method="post"> <input class="btn btn-primary" type="submit" value="Loan" /> </form>
 						}
 						else
 						{
-							<a asp-controller="Book" asp-action="Return" asp-route-id="@book.Id" class="btn btn-danger">Return</a>
+							<form class="ml-2" asp-controller="Book" asp-action="Return" asp-route-id="@book.Id" method="post"> <input class="btn btn-primary" type="submit" value="Return" /> </form>
 						}
 					}
 				</div>
