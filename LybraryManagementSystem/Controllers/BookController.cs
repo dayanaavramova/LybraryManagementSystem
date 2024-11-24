@@ -223,6 +223,50 @@ namespace LibraryManagementSystem.Controllers
 			return RedirectToAction(nameof(All));
 		}
 
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (await bookService.ExistsAsync(id) == false)
+            {
+                return BadRequest();
+            }
+            if (await bookService.HasLibrarianWithIdAsync(id, GetUserId()) == false)
+            {
+                return Unauthorized();
+            }
+
+            var book = bookService.BookDetailsByIdAsync(id);
+            var model = new BookDetailsViewModel()
+            {
+                Id = book.Id,
+                Title = book.Result.Title,
+                Author = book.Result.Author,
+                ISBN = book.Result.ISBN,
+                ImageUrl = book.Result.ImageUrl,
+                PublishedDate = book.Result.DatePublished
+            };
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Delete(BookDetailsViewModel model)
+        {
+			if (await bookService.ExistsAsync(model.Id) == false)
+			{
+				return BadRequest();
+			}
+			if (await bookService.HasLibrarianWithIdAsync(model.Id, GetUserId()) == false)
+			{
+				return Unauthorized();
+			}
+
+            await bookService.DeleteAsync(model.Id);
+
+			return RedirectToAction(nameof(All));
+        }
+
 		public string GetUserId()
 		{
 			return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;

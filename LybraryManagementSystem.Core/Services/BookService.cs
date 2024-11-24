@@ -168,7 +168,8 @@ namespace LibraryManagementSystem.Core.Services
 
 		public async Task DeleteAsync(int id)
 		{
-			
+			await repository.DeleteAsync<Book>(id);
+            await repository.SaveChangesAsync();
 		}
 
 		public async Task EditAsync(int bookId, BookFormModel model)
