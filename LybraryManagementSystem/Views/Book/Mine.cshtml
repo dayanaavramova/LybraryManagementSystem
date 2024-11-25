@@ -12,6 +12,11 @@
 	<h2 class="text-center">You have no books yet!</h2>
 }
 
+<a asp-controller="Reservation"
+   asp-action="All"
+   class="btn btn-success">
+	Reservations
+</a>
 <div class="row">
 	@foreach (var book in Model)
 	{

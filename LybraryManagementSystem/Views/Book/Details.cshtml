@@ -38,6 +38,7 @@
 						else
 						{
 							<form class="ml-2" asp-controller="Book" asp-action="Return" asp-route-id="@Model.Id" method="post"> <input class="btn btn-primary" type="submit" value="Return" /> </form>
+							<form class="ml-2" asp-controller="Reservation" asp-action="Add" asp-route-id="@Model.Id" method="post"> <input class="btn btn-primary" type="submit" value="Reserve" /> </form>
 						} 
 				
 					</div> 

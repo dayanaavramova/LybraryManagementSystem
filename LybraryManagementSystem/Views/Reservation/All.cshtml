@@ -1,0 +1,36 @@
+﻿@using LibraryManagementSystem.Core.Models.Reservation;
+@model AllReservationsServiceModel
+
+@{
+	ViewBag.Title = "My Reservations";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+
+<hr />
+
+@if (!Model.Reservations.Any())
+{
+	<h2 class="text-center">You don't have any reservations yet!</h2>
+}
+<div class="row">
+	@foreach (var reservation in Model.Reservations)
+	{
+		<div class="col-md-4">
+
+			<div class="card mb-3">
+				<img class="card-img-top" src="@reservation.Book.ImageUrl" alt="Book Image">
+				<div class="card-body text-center">
+					<h6>Book Title: <b>@reservation.Book.Title</b></h6
+					<br />
+					<a asp-controller="Book"
+				   asp-action="Details"
+				   asp-route-id="@reservation.Book.Id" class="btn btn-success">
+						Details
+					</a>
+					<form class="ml-2" asp-controller="Reservation" asp-action="Remove" asp-route-id="@reservation.Book.Id" method="post"> <input class="btn btn-primary" type="submit" value="Remove" /> </form>
+				</div>
+			</div>
+		</div>
+	}
+</div>

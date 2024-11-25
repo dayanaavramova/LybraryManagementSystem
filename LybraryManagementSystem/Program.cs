@@ -20,6 +20,7 @@ builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<ILibrarianService, LibrarianService>();
 builder.Services.AddScoped<IMemberService, MemberService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 {
