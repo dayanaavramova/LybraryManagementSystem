@@ -2,26 +2,39 @@
 using LibraryManagementSystem.Infrastructure.Data.SeedDb;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace LibraryManagementSystem.Infrastructure.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        private bool _seedDb;
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, bool seedDb = true)
             : base(options)
         {
+            if (Database.IsRelational())
+            {
+                Database.Migrate();
+            }
+            else
+            {
+                Database.EnsureCreated();
+            }
+            _seedDb = seedDb;
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfiguration(new UserConfiguration());
-            builder.ApplyConfiguration(new LibrarianConfiguration());
-            builder.ApplyConfiguration(new MemberConfiguration());
-            builder.ApplyConfiguration(new GenreConfiguration());
-            builder.ApplyConfiguration(new BookConfiguration());
-            builder.ApplyConfiguration(new ReservationConfiguration());
-            builder.ApplyConfiguration(new ReviewConfiguration());
-
+            if (_seedDb)
+            {
+                builder.ApplyConfiguration(new UserConfiguration());
+                builder.ApplyConfiguration(new LibrarianConfiguration());
+                builder.ApplyConfiguration(new MemberConfiguration());
+                builder.ApplyConfiguration(new GenreConfiguration());
+                builder.ApplyConfiguration(new BookConfiguration());
+                builder.ApplyConfiguration(new ReservationConfiguration());
+                builder.ApplyConfiguration(new ReviewConfiguration());
+            }
 
             base.OnModelCreating(builder);
         }
